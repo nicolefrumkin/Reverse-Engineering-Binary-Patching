@@ -1,0 +1,5 @@
+This time we will not change the bit in index 0,
+but we will append a bit in the end and increase the counter by one.
+The bit we add in the end will be the result of the total xor and 120.
+If the count is smaller than the length of the input, then it overrides a byte in the message.
+If not, it appends a byte in the end of the message.

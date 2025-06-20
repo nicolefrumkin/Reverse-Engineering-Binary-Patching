@@ -1,0 +1,6 @@
+this time, we want to change mov eax, 1 with mov eax, 0 in the main function right before we return 
+to do that, we iterate over the data and look for the sequence:
+B8 01 00 00 00
+and replace it with:
+B8 00 00 00 00
+

@@ -1,0 +1,15 @@
+we want to patch the lines:
+.text:08048594                 cmp     al, [ebp+var_9]
+.text:08048597                 setz    al
+
+We can change them so that al is always set to 1, regardless of the message:
+mov al, 1          
+nop                
+nop                
+nop                
+where nop is added to fill the gap that is created.
+
+in our code, we look for the bytes: 3A 45 0F 94 0C which correspond to the line 2 lines above.
+when we find it, we change it to B0 01 (which corresponds to mov al, 1) and 90 (which corresponds to nop).
+
+

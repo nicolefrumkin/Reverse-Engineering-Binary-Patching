@@ -1,0 +1,11 @@
+the message is divided into 3 parts:
+1. first byte - num of bytes to xor
+2. second byte - starting value to xor with
+3. the message itself in bytes
+
+in my validate function, I save the number of bytes to xor in the variable count
+then I save the starting value in total
+I iterate over the bytes of string (as long as the index is smaller than length of the string)
+and xor the bytes.
+
+the result is true if the xored bytes are equal to 0x78.

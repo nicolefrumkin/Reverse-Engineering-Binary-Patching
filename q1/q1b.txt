@@ -1,0 +1,4 @@
+We want that the xor result will be equal to 120.
+So we want to change the value in data[1].
+we can do that by xoring the correct indices till the value in data[0] and with the number 120.
+after that, we store it in data[1].

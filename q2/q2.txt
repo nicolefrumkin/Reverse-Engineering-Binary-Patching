@@ -1,0 +1,5 @@
+in the readfile, we have one large dead zone, so we placed there patch2.
+But we don't want it to be executed immidately, that's why we add a jump instruction to the read file function.
+after the input is loaded by fgets, we jump to the patch1, which redirects us to patch2. 
+in patch 2, we compare the first 2 bytes and check if they are equal to !#, if they are, we skip the print.
+in the python function, we calculate the offset we want to place our patches, using the base address of the text file. then, we simply assign the patches and return the patched data.
