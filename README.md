@@ -1,70 +1,69 @@
 # Reverse Engineering & Binary Patching
 
-This project includes solutions for a reverse engineering and binary patching exercise using Python and IDA. The tasks involve analyzing ELF binaries, modifying program behavior, and changing outputs without access to the original source code.
+In this project, I worked on analyzing ELF binaries using IDA and Python to reverse engineer their behavior and patch them without having access to the source code. I focused on understanding low-level logic, crafting alternative control flows, and modifying executable files to change how they behave—all while keeping the original structure mostly intact.
 
 ## 📁 Project Structure
+
+```
 q1/
-
-├── q1a.py # Checks if a .msg file is valid using the same logic as msgcheck binary
-
-├── q1b.py # Fixes invalid messages by correcting a single byte
-
-├── q1c.py # Provides an alternative fix by appending a correction byte
-
-├── q1d.py # Patches the binary to always print "valid message"
-
-├── q1e.py # Patches the binary to always return 0, but still prints the original message
+├── q1a.py       # Re-implemented the logic of msgcheck binary in Python
+├── q1b.py       # Fixed an invalid .msg file by updating the checksum byte
+├── q1c.py       # Alternative fix: appended a new correction byte to pass validation
+├── q1d.py       # Patched the binary to always show "valid message"
+├── q1e.py       # Patched the binary to always return 0, no matter the input
 
 q2/
+├── q2.py        # Patched readfile binary to execute shell commands starting with #!
+├── patch1.asm   # Redirects execution from a small deadzone to the full patch
+├── patch2.asm   # Handles logic: execute #! lines via system(), skip otherwise
+```
 
-├── q2.py # Patches the readfile binary so lines starting with #! are executed as shell commands
+## ✅ What I Did
 
-├── patch1.asm # Redirects execution to patch2 from a small deadzone
+### 🔍 Question 1: Reverse Engineering `msgcheck`
 
-├── patch2.asm # Executes system() on lines starting with #!
+* **q1a.py**: I reverse engineered the logic of the `msgcheck` ELF binary and re-implemented the message validation check in Python.
+* **q1b.py**: Created a function that fixes corrupted message files by calculating the expected checksum and replacing a single byte.
+* **q1c.py**: Designed an alternative approach by appending a new byte that corrected the checksum while minimally modifying the original data.
+* **q1d.py**: Patched the binary so it always prints `"valid message"` regardless of the message content.
+* **q1e.py**: Patched the binary to always return `0` (success), even if the message content is invalid—without modifying its visible output.
 
+### 🛠 Question 2: Patching `readfile`
 
-## 🔍 Overview of Tasks
+* **q2.py**: This was a more advanced challenge. I patched the `readfile` binary so that lines starting with `#!` are executed as shell commands instead of being printed. Regular lines are still printed normally.
+* Used **two patch zones**:
 
-### ✅ Question 1: Message Checker (`msgcheck`)
-- **q1a.py**: Re-implements the logic of the binary to check if a `.msg` file is valid.
-- **q1b.py**: Fixes an invalid message by modifying the total checksum byte.
-- **q1c.py**: Fixes a message by adding a new byte that corrects the checksum.
-- **q1d.py**: Patches the binary to always follow the "valid" branch.
-- **q1e.py**: Patches the binary to return `0` (success) for any input, without changing output.
-
-### ✅ Question 2: File Reader (`readfile`)
-- **q2.py**: Patches the `readfile` binary to detect lines starting with `#!` and execute them as shell commands. Other lines are printed normally.
-- **patch1.asm**: Injected into a small deadzone, redirects to `patch2`.
-- **patch2.asm**: Injected into a large deadzone, checks the line and calls `system()` if needed.
+  * **patch1.asm**: A small redirection patch placed in a limited-size deadzone.
+  * **patch2.asm**: The main logic placed in a larger deadzone, handling the condition and calling `system()` if needed.
 
 ## 🧪 How to Run
 
-Each patch or checker is a self-contained Python script.
+All scripts are written in Python 3 and tested on a Linux VM with IDA installed.
 
 Examples:
 
 ```bash
-python3 q1a.py 01.msg         # Check message validity
-python3 q1b.py 02.msg         # Fix invalid message
-python3 q1d.py msgcheck       # Patch msgcheck to always validate
-python3 q2.py readfile        # Patch readfile to run #! lines
+python3 q1a.py 01.msg         # Re-check if message is valid
+python3 q1b.py 02.msg         # Fix invalid .msg file
+python3 q1d.py msgcheck       # Patch binary to always say "valid"
+python3 q2.py readfile        # Patch readfile binary to run shell commands
 ```
-Make sure to chmod +x patched binaries before running them:
 
-bash
+Make the patched binaries executable:
 
+```bash
 chmod +x msgcheck.patched
-
 chmod +x readfile.patched
+```
 
-🔧 Tools Used
+## 🛠 Tools & Skills
 
-Python 3
+* **Python 3** – for scripting and patch automation
+* **IDA Free** – for binary disassembly and control flow analysis
+* **infosec.core.assemble** – for assembling custom x86 instructions into bytes
+* **Binary patching** – changing ELF executables manually using offsets and deadzones
+* **x86 Assembly** – writing custom logic to replace and extend original binary behavior
 
-IDA Free (for disassembly and patch analysis)
+---
 
-infosec.core.assemble (for assembling x86 instructions)
-
-ELF binary patching and reverse engineering
-
+This project really sharpened my skills in reverse engineering, assembly, and program behavior manipulation. It also gave me hands-on experience in identifying control flow points, modifying them safely, and automating the process with scripts and injected code.
